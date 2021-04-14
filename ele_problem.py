@@ -98,6 +98,7 @@ class EleEnvi(gym.Env):
         return np.array(self.state), reward,done,{}
 
     def reset(self):
+        #set elevator positions to 0th floor
 
     def render(self):
         pass
