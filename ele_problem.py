@@ -98,7 +98,7 @@ class EleEnvi(gym.Env):
         return np.array(self.state), reward,done,{}
 
     def reset(self):
-        
+       # reset 
 
     def render(self):
         pass
