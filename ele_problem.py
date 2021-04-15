@@ -2,13 +2,14 @@ import gym
 from gym import spaces
 
 class Elevator:
-    def __init__(self,num_floor):
-        self.ppls_destinations = [[]*num_floor]
-        self.floors = [Floor() for i in range(num_floor)]
+    def __init__(self,floors):
+
+        self.num_floors = len(floors)
+        self.ppls_destinations = [[]*self.num_floors]
+        self.floors = floors
         
         #0~num_floor-1
         self.location = 0 
-        self.waiting_times = []
 
     def ppl_ride(self):
         #people ride from current floor
@@ -23,22 +24,28 @@ class Elevator:
 
     def ppl_get_off(self,cur_step_count):
         
+        waiting_times = []
+
         ppl_getting_off = self.ppls_destinations[self.location]
         for person in ppl_getting_off:
             person.end_time = cur_step_count
-            self.waiting_times.append(person.get_time_taken())
+            waiting_times.append(person.get_time_taken())
 
         ppl_getting_off = []
 
+        return waiting_times
+
     def move_up(self):
-        self.location = min(num_floor-1,self.location+1)
-        self.ppl_get_off()
+        self.location = min(self.num_floors-1,self.location+1)
+        waiting_times = self.ppl_get_off()
         self.ppl_ride()
+        return waiting_times
 
     def move_down(self):
         self.location = max(0,self.location-1)
-        self.ppl_get_off()
+        waiting_times = self.ppl_get_off()
         self.ppl_ride()
+        return waiting_times
 
 
 class Floor:
@@ -97,8 +104,9 @@ class EleEnvi(gym.Env):
 
         return np.array(self.state), reward,done,{}
 
-    def reset(self):
+    def reset(self,ppl_queue):
         #set elevator positions to 0th floor
+        #receive queue of people: the queue will describe when and where they appear in the building
 
     def render(self):
         pass
