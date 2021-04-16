@@ -1,7 +1,5 @@
 import tensorflow as tf
 
-
-
 class agent:
 
     def __init__(self,input_shape,output_size,optimizer=None):
